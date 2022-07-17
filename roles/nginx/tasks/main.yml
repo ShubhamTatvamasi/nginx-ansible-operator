@@ -1,0 +1,25 @@
+---
+# tasks file for Nginx
+- name: Deploy Nginx
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: "{{ ansible_operator_meta.name }}-nginx"
+        namespace: "{{ ansible_operator_meta.namespace }}"
+        labels:
+          app: nginx
+      spec:
+        replicas: "{{ replicas }}"
+        selector:
+          matchLabels:
+            app: nginx
+        template:
+          metadata:
+            labels:
+              app: nginx
+          spec:
+            containers:
+            - name: nginx
+              image: nginx:alpine
